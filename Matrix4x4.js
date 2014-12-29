@@ -84,3 +84,27 @@ Matrix4x4.prototype.transformVec4 = function(destVec, vec) {
 
   return destVec;
 };
+
+/**
+ * Transform vector at vecOffset in vec and place result at destVecOffset in
+ * destVec. Result can be written in place by giving the same values for destVec
+ * as for vec.
+ * @param {!(Array<number>|Float32Array)} destVec
+ * @param {number} destVecOffset
+ * @param {!(Array<number>|Float32Array)} vec
+ * @param {number} vecOffset
+ */
+Matrix4x4.prototype.transformOffsetVec4 = function(destVec, destVecOffset, vec, vecOffset) {
+  var m = this.m_;
+  vecOffset = vecOffset || 0;
+  var v0 = vec[0 + vecOffset];
+  var v1 = vec[1 + vecOffset];
+  var v2 = vec[2 + vecOffset];
+  var v3 = vec[3 + vecOffset];
+
+  destVecOffset = destVecOffset || 0;
+  destVec[0 + destVecOffset] = v0 * m[0] + v1 * m[4] + v2 * m[8]  + v3 * m[12];
+  destVec[1 + destVecOffset] = v0 * m[1] + v1 * m[5] + v2 * m[9]  + v3 * m[13];
+  destVec[2 + destVecOffset] = v0 * m[2] + v1 * m[6] + v2 * m[10] + v3 * m[14];
+  destVec[3 + destVecOffset] = v0 * m[3] + v1 * m[7] + v2 * m[11] + v3 * m[15];
+};
