@@ -1,24 +1,30 @@
-/**
- * Copyright 2014 Google Inc. All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+/* global Matrix4x4 */
 
-var GEOMETRY_ = new Float32Array([
-  0, 0,
-  1, 1,
-  0, 1,
-  0, 0,
-  1, 0,
-  1, 1
+var QUAD_GEOMETRY = new Float32Array([
+  0, 0, 0, 1,
+  1, 1, 0, 1,
+  0, 1, 0, 1,
+  0, 0, 0, 1,
+  1, 0, 0, 1,
+  1, 1, 0, 1
 ]);
+
+var TEST_COUNT = 100;
+
+function generateTestGeometry() {
+  var testGeometry = new Float32Array(TEST_COUNT * QUAD_GEOMETRY.length);
+
+  var transform = new Matrix4x4();
+  for (var i = 0; i < TEST_COUNT; i++) {
+    var theta = i / TEST_COUNT * 2 * Math.PI;
+    transform.identity();
+    transform.rotateY(theta);
+
+    for (var j = 0; j < QUAD_GEOMETRY.length; j += 4) {
+      var destOffset = i * QUAD_GEOMETRY.length + j;
+      transform.transformOffsetVec4(testGeometry, destOffset, QUAD_GEOMETRY, j);
+    }
+  }
+
+  return testGeometry;
+}
