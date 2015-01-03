@@ -14,7 +14,7 @@ var Matrix4x4 = function() {
 };
 
 /** @typedef {Array<number>|Float32Array} */
-Vec4;
+// Vec4;
 
 /**
  * Reset matrix to the identity transformation.
