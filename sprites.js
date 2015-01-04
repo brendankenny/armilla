@@ -9,15 +9,17 @@ var QUAD_GEOMETRY = new Float32Array([
   1, 1, 0, 1
 ]);
 
-var TEST_COUNT = 100;
-
-function generateTestGeometry() {
-  var testGeometry = new Float32Array(TEST_COUNT * 6 * 6);
+function generateTestGeometry(count) {
+  var testGeometry = new Float32Array(count * 6 * 6);
 
   var transform = new Matrix4x4();
-  for (var i = 0; i < TEST_COUNT; i++) {
-    var theta = i / TEST_COUNT * 2 * Math.PI;
+  var radius = 1 / Math.tan(2 * Math.PI / count);
+  for (var i = 0; i < count; i++) {
+    var theta = i / count * 2 * Math.PI;
     transform.identity();
+    // TODO(bckenny): adjust to add space in between sprites
+    transform.scaleUniform(1 / radius);
+    transform.translate(0, 0, radius);
     transform.rotateY(theta);
 
     for (var j = 0; j < QUAD_GEOMETRY.length / 4; j++) {

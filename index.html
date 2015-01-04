@@ -3,6 +3,17 @@
   <head>
     <meta charset="utf-8">
     <title>armilla runner</title>
+    <style>
+      html,body {
+        margin: 0;
+        padding: 0;
+      }
+      #globe {
+        width: 500px;
+        height: 500px;
+        border: 1px solid black;
+      }
+    </style>
     <script src="Matrix4x4.js"></script>
     <script src="ShaderProgram.js"></script>
     <script src="sprites.js"></script>
@@ -11,6 +22,9 @@
     <canvas id="globe"></canvas>
 
     <script>
+      /* global ShaderProgram, Matrix4x4, generateTestGeometry */
+      var TEST_COUNT = 20;
+
       var canvas = document.getElementById('globe');
       var gl = canvas.getContext('webgl');
 
@@ -18,15 +32,56 @@
       gl.enable(gl.BLEND);
       gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
 
+      // TODO(bckenny): zbuffer
+
+      var spriteProgram;
+      var testArrayBuffer;
       ShaderProgram.fromXhr(gl, 'shaders/circle_sprite.vert', 'shaders/circle_sprite.frag')
         .then(function(program) {
-          window.pointProgram = program;
-          pointProgram.use();
-          this.gl.enableVertexAttribArray(pointProgram.attributes.worldCoord);
-          this.gl.enableVertexAttribArray(pointProgram.attributes.uvCoord);
+          spriteProgram = program;
+          program.use();
+          gl.enableVertexAttribArray(program.attributes.worldCoord);
+          gl.enableVertexAttribArray(program.attributes.uvCoord);
 
-          // update
+          init();
         }.bind(this));
+
+      function init() {
+        var resolutionScale = window.devicePixelRatio || 1;
+        var width = canvas.offsetWidth;
+        var height = canvas.offsetHeight;
+        canvas.width = width * resolutionScale;
+        canvas.height = height * resolutionScale;
+        gl.viewport(0, 0, width, height);
+
+        var testGeometry = generateTestGeometry(TEST_COUNT);
+
+        testArrayBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, testArrayBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, testGeometry, gl.STATIC_DRAW);
+
+        update();
+      }
+
+      function update() {
+        // TODO(bckenny): zbuffer
+        gl.clear(gl.COLOR_BUFFER_BIT);
+
+        var worldTransform = new Matrix4x4();
+        // worldTransform.rotateX(Math.PI / 8);
+
+        spriteProgram.use();
+
+        // attribute offsets
+        gl.vertexAttribPointer(spriteProgram.attributes.worldCoord, 4, gl.FLOAT, false, 24, 0);
+        gl.vertexAttribPointer(spriteProgram.attributes.uvCoord, 2, gl.FLOAT, false, 24, 16);
+
+        // set uniforms
+        spriteProgram.uniforms.globeMatrix(worldTransform.m_);
+        // gl['uniformMatrix4fv'](spriteProgram.uniforms.globeMatrix.location, false, worldTransform);
+
+        gl.drawArrays(gl.TRIANGLES, 0, TEST_COUNT * 2);
+      }
     </script>
   </body>
 </html>

@@ -18,6 +18,7 @@ var Matrix4x4 = function() {
 
 /**
  * Reset matrix to the identity transformation.
+ * @return {!Matrix4x4} This matrix.
  */
 Matrix4x4.prototype.identity = function() {
   var m = this.m_;
@@ -31,8 +32,43 @@ Matrix4x4.prototype.identity = function() {
 };
 
 /**
+ * Rotate the matrix by angle theta about the x axis.
+ * @param {number} theta The rotation angle, in radians.
+ * @return {!Matrix4x4} This matrix.
+ */
+Matrix4x4.prototype.rotateX = function(theta) {
+  var cos = Math.cos(theta);
+  var sin = Math.sin(theta);
+
+  var m = this.m_;
+
+  var c2 = cos*m[4] + m[8]*sin;
+  var c3 = cos*m[8] - m[4]*sin;
+  m[4] = c2;
+  m[8] = c3;
+
+  c2 = cos*m[5] + m[9]*sin;
+  c3 = cos*m[9] - m[5]*sin;
+  m[5] = c2;
+  m[9] = c3;
+
+  c2 = cos*m[6] + m[10]*sin;
+  c3 = cos*m[10] - m[6]*sin;
+  m[6] = c2;
+  m[10] = c3;
+
+  c2 = cos*m[7] + m[11]*sin;
+  c3 = cos*m[11] - m[7]*sin;
+  m[7] = c2;
+  m[11] = c3;
+
+  return this;
+};
+
+/**
  * Rotate the matrix by angle theta about the y axis.
  * @param {number} theta The rotation angle, in radians.
+ * @return {!Matrix4x4} This matrix.
  */
 Matrix4x4.prototype.rotateY = function(theta) {
   var cos = Math.cos(theta);
@@ -64,11 +100,37 @@ Matrix4x4.prototype.rotateY = function(theta) {
 };
 
 /**
+ * Apply a scale of factor scale.
+ * @param {number} scale
+ * @return {!Matrix4x4} This matrix.
+ */
+Matrix4x4.prototype.scaleUniform = function(scale) {
+  var m = this.m_;
+
+  m[0] *= scale;
+  m[1] *= scale;
+  m[2] *= scale;
+  m[3] *= scale;
+
+  m[4] *= scale;
+  m[5] *= scale;
+  m[6] *= scale;
+  m[7] *= scale;
+
+  m[8] *= scale;
+  m[9] *= scale;
+  m[10] *= scale;
+  m[11] *= scale;
+
+  return this;
+};
+
+/**
  * Transform vec and place result in destVec. Returns destVec. destVec and vec
  * can be the same Vec4.
- * @param {Vec4} destVec
+ * @param {!Vec4} destVec
  * @param {Vec4} vec
- * @return {Vec4} destVec
+ * @return {!Vec4} destVec
  */
 Matrix4x4.prototype.transformVec4 = function(destVec, vec) {
   var m = this.m_;
@@ -107,4 +169,22 @@ Matrix4x4.prototype.transformOffsetVec4 = function(destVec, destVecOffset, vec, 
   destVec[1 + destVecOffset] = v0 * m[1] + v1 * m[5] + v2 * m[9]  + v3 * m[13];
   destVec[2 + destVecOffset] = v0 * m[2] + v1 * m[6] + v2 * m[10] + v3 * m[14];
   destVec[3 + destVecOffset] = v0 * m[3] + v1 * m[7] + v2 * m[11] + v3 * m[15];
+};
+
+/**
+ * Translate by vector tx, ty, tz.
+ * @param {number} tx
+ * @param {number} ty
+ * @param {number} tz
+ * @return {!Matrix4x4} This matrix.
+ */
+Matrix4x4.prototype.translate = function(tx, ty, tz) {
+  var m = this.m_;
+
+  m[12] += m[0]*tx + m[4]*ty + m[8]*tz;
+  m[13] += m[1]*tx + m[5]*ty + m[9]*tz;
+  m[14] += m[2]*tx + m[6]*ty + m[10]*tz;
+  m[15] += m[3]*tx + m[7]*ty + m[11]*tz;
+
+  return this;
 };
