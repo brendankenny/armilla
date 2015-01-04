@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>armilla runner</title>
     <script src="Matrix4x4.js"></script>
+    <script src="ShaderProgram.js"></script>
     <script src="sprites.js"></script>
   </head>
   <body>
@@ -12,6 +13,20 @@
     <script>
       var canvas = document.getElementById('globe');
       var gl = canvas.getContext('webgl');
+
+      // enable alpha blending
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+
+      ShaderProgram.fromXhr(gl, 'shaders/circle_sprite.vert', 'shaders/circle_sprite.frag')
+        .then(function(program) {
+          window.pointProgram = program;
+          pointProgram.use();
+          this.gl.enableVertexAttribArray(pointProgram.attributes.worldCoord);
+          this.gl.enableVertexAttribArray(pointProgram.attributes.uvCoord);
+
+          // update
+        }.bind(this));
     </script>
   </body>
 </html>
