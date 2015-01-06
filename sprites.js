@@ -19,7 +19,7 @@ function generateTestGeometry(count) {
     transform.identity();
     // TODO(bckenny): adjust to add space in between sprites
     transform.scaleUniform(1 / radius);
-    transform.translate(0, 0, radius);
+    transform.translate(0, -0.5, radius);
     transform.rotateY(theta);
 
     for (var j = 0; j < QUAD_GEOMETRY.length / 4; j++) {

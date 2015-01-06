@@ -100,6 +100,40 @@ Matrix4x4.prototype.rotateY = function(theta) {
 };
 
 /**
+ * Rotate the matrix by angle theta about the z axis.
+ * @param {number} theta The rotation angle, in radians.
+ * @return {!Matrix4x4} This matrix.
+ */
+Matrix4x4.prototype.rotateZ = function(theta) {
+  var cos = Math.cos(theta);
+  var sin = Math.sin(theta);
+
+  var m = this.m_;
+
+  var c1 = cos*m[0] + m[4]*sin;
+  var c2 = cos*m[4] - m[0]*sin;
+  m[0] = c1;
+  m[4] = c2;
+
+  c1 = cos*m[1] + m[5]*sin;
+  c2 = cos*m[5] - m[1]*sin;
+  m[1] = c1;
+  m[5] = c2;
+
+  c1 = cos*m[2] + m[6]*sin;
+  c2 = cos*m[6] - m[2]*sin;
+  m[2] = c1;
+  m[6] = c2;
+
+  c1 = cos*m[3] + m[7]*sin;
+  c2 = cos*m[7] - m[3]*sin;
+  m[3] = c1;
+  m[7] = c2;
+
+  return this;
+};
+
+/**
  * Apply a scale of factor scale.
  * @param {number} scale
  * @return {!Matrix4x4} This matrix.

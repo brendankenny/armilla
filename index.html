@@ -52,7 +52,7 @@
         var height = canvas.offsetHeight;
         canvas.width = width * resolutionScale;
         canvas.height = height * resolutionScale;
-        gl.viewport(0, 0, width, height);
+        gl.viewport(0, 0, width * resolutionScale, height * resolutionScale);
 
         var testGeometry = generateTestGeometry(TEST_COUNT);
 
@@ -63,12 +63,16 @@
         update();
       }
 
+      var theta = 0;
+
       function update() {
         // TODO(bckenny): zbuffer
         gl.clear(gl.COLOR_BUFFER_BIT);
 
+        theta += Math.PI / 60;
+
         var worldTransform = new Matrix4x4();
-        // worldTransform.rotateX(Math.PI / 8);
+        worldTransform.rotateX(theta);
 
         spriteProgram.use();
 
@@ -81,6 +85,8 @@
         // gl['uniformMatrix4fv'](spriteProgram.uniforms.globeMatrix.location, false, worldTransform);
 
         gl.drawArrays(gl.TRIANGLES, 0, TEST_COUNT * 2);
+
+        window.requestAnimationFrame(update);
       }
     </script>
   </body>
