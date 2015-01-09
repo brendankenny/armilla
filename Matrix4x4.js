@@ -31,6 +31,63 @@ Matrix4x4.prototype.identity = function() {
   return this;
 };
 
+// TODO: standardize terminology
+/**
+ * Add a perspective transformation.
+ * @param {number} fov
+ * @param {number} aspect
+ * @param {number} near
+ * @param {number} far
+ * @return {Matrix4x4}
+ */
+Matrix4x4.prototype.perspective = function(fov, aspect, near, far) {
+  var cx = Math.cos(fov/2);
+  var cy = cx;
+  var s = -Math.sin(fov/2);
+  var q = s / (1 - near/far);
+  var zs = q * (1 + near/far);
+  var zt = q * 2 * near;
+  var tmp2, tmp6, tmp10, tmp14;
+
+  var m = this.m_;
+
+  if (aspect > 1) {
+    // width > height
+    cx /= aspect;
+
+  } else {
+    // height > width
+    cy *= aspect;
+  }
+
+  m[0] *= cx;
+  m[4] *= cx;
+  m[8] *= cx;
+  m[12] *= cx;
+
+  m[1] *= cy;
+  m[5] *= cy;
+  m[9] *= cy;
+  m[13] *= cy;
+
+  tmp2 = m[2];
+  tmp6 = m[6];
+  tmp10 = m[10];
+  tmp14 = m[14];
+
+  m[2] = tmp2*zs + m[3]*zt;
+  m[6] = tmp6*zs + m[7]*zt;
+  m[10] = tmp10*zs + m[11]*zt;
+  m[14] = tmp14*zs + m[15]*zt;
+
+  m[3] = tmp2 * s;
+  m[7] = tmp6 * s;
+  m[11] = tmp10 * s;
+  m[15] = tmp14 * s;
+
+  return this;
+};
+
 /**
  * Rotate the matrix by angle theta about the x axis.
  * @param {number} theta The rotation angle, in radians.
