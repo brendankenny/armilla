@@ -89,6 +89,57 @@ Matrix4x4.prototype.perspective = function(fov, aspect, near, far) {
 };
 
 /**
+ * Sets this matrix to the local transformation within the view transformation.
+ * view and/or local can also be this matrix.
+ * @param {!Matrix4x4} view
+ * @param {!Matrix4x4} local
+ * @return {!Matrix4x4}
+ */
+Matrix4x4.prototype.product = function(view, local) {
+  var v = view.m;
+  var l = local.m;
+
+  var m0 = v[0]*l[0] + v[4]*l[1] + v[8]*l[2] + v[12]*l[3];
+  var m1 = v[1]*l[0] + v[5]*l[1] + v[9]*l[2] + v[13]*l[3];
+  var m2 = v[2]*l[0] + v[6]*l[1] + v[10]*l[2] + v[14]*l[3];
+  var m3 = v[3]*l[0] + v[7]*l[1] + v[11]*l[2] + v[15]*l[3];
+
+  var m4 = v[0]*l[4] + v[4]*l[5] + v[8]*l[6] + v[12]*l[7];
+  var m5 = v[1]*l[4] + v[5]*l[5] + v[9]*l[6] + v[13]*l[7];
+  var m6 = v[2]*l[4] + v[6]*l[5] + v[10]*l[6] + v[14]*l[7];
+  var m7 = v[3]*l[4] + v[7]*l[5] + v[11]*l[6] + v[15]*l[7];
+
+  var m8 = v[0]*l[8] + v[4]*l[9] + v[8]*l[10] + v[12]*l[11];
+  var m9 = v[1]*l[8] + v[5]*l[9] + v[9]*l[10] + v[13]*l[11];
+  var m10 = v[2]*l[8] + v[6]*l[9] + v[10]*l[10] + v[14]*l[11];
+  var m11 = v[3]*l[8] + v[7]*l[9] + v[11]*l[10] + v[15]*l[11];
+
+  var m12 = v[0]*l[12] + v[4]*l[13] + v[8]*l[14] + v[12]*l[15];
+  var m13 = v[1]*l[12] + v[5]*l[13] + v[9]*l[14] + v[13]*l[15];
+  var m14 = v[2]*l[12] + v[6]*l[13] + v[10]*l[14] + v[14]*l[15];
+  var m15 = v[3]*l[12] + v[7]*l[13] + v[11]*l[14] + v[15]*l[15];
+
+  this.m[0] = m0;
+  this.m[1] = m1;
+  this.m[2] = m2;
+  this.m[3] = m3;
+  this.m[4] = m4;
+  this.m[5] = m5;
+  this.m[6] = m6;
+  this.m[7] = m7;
+  this.m[8] = m8;
+  this.m[9] = m9;
+  this.m[10] = m10;
+  this.m[11] = m11;
+  this.m[12] = m12;
+  this.m[13] = m13;
+  this.m[14] = m14;
+  this.m[15] = m15;
+
+  return this;
+};
+
+/**
  * Rotate the matrix by angle theta about the x axis.
  * @param {number} theta The rotation angle, in radians.
  * @return {!Matrix4x4} This matrix.
