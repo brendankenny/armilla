@@ -13,14 +13,14 @@ function generateTestGeometry(count) {
   var testGeometry = new Float32Array(count * 6 * 6);
 
   var transform = new Matrix4x4();
-  var radius = 1 / Math.tan(2 * Math.PI / count);
   for (var i = 0; i < count; i++) {
     var theta = i / count * 2 * Math.PI;
+
     transform.identity();
-    // TODO(bckenny): adjust to add space in between sprites
-    transform.scaleUniform(0.2);
-    transform.translate(0, -0.5, 1);
     transform.rotateY(theta);
+    transform.translate(0, 0, 0.9);
+    transform.scaleUniform(0.2);
+    transform.translate(0, -0.5, 0);
 
     for (var j = 0; j < QUAD_GEOMETRY.length / 4; j++) {
       // add transformed world coordinate and texture coordinate
