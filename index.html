@@ -69,10 +69,10 @@
         // TODO(bckenny): zbuffer
         gl.clear(gl.COLOR_BUFFER_BIT);
 
-        theta += Math.PI / 60;
+        theta += Math.PI / 240;
 
         var worldTransform = new Matrix4x4();
-        worldTransform.rotateX(theta);
+        worldTransform.rotateY(theta);
 
         spriteProgram.use();
 
@@ -84,7 +84,7 @@
         spriteProgram.uniforms.globeMatrix(worldTransform.m_);
         // gl['uniformMatrix4fv'](spriteProgram.uniforms.globeMatrix.location, false, worldTransform);
 
-        gl.drawArrays(gl.TRIANGLES, 0, TEST_COUNT * 2);
+        gl.drawArrays(gl.TRIANGLES, 0, TEST_COUNT * 6);
 
         window.requestAnimationFrame(update);
       }

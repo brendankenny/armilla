@@ -18,8 +18,8 @@ function generateTestGeometry(count) {
     var theta = i / count * 2 * Math.PI;
     transform.identity();
     // TODO(bckenny): adjust to add space in between sprites
-    transform.scaleUniform(1 / radius);
-    transform.translate(0, -0.5, radius);
+    transform.scaleUniform(0.2);
+    transform.translate(0, -0.5, 1);
     transform.rotateY(theta);
 
     for (var j = 0; j < QUAD_GEOMETRY.length / 4; j++) {
