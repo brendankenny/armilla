@@ -268,6 +268,18 @@ Matrix4x4.prototype.scaleUniform = function(scale) {
 };
 
 /**
+ * Set this array from array src.
+ * @param {!(Array<number>|Float32Array)} src
+ */
+Matrix4x4.prototype.setFromArray = function(src) {
+  for (var i = 0; i < 16; i++) {
+    this.m_[i] = src[i];
+  }
+
+  return this;
+};
+
+/**
  * Transform vec and place result in destVec. Returns destVec. destVec and vec
  * can be the same Vec4.
  * @param {!Vec4} destVec

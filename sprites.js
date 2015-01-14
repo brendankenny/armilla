@@ -16,11 +16,11 @@ function generateTestGeometry(count) {
   for (var i = 0; i < count; i++) {
     var theta = i / count * 2 * Math.PI;
 
-    transform.identity();
-    transform.rotateY(theta);
-    transform.translate(0, 0, 0.9);
-    transform.scaleUniform(0.2);
-    transform.translate(0, -0.5, 0);
+    transform.identity()
+      .rotateY(theta)
+      .translate(0, 0, 0.9)
+      .scaleUniform(0.2)
+      .translate(0, -0.5, 0);
 
     for (var j = 0; j < QUAD_GEOMETRY.length / 4; j++) {
       // add transformed world coordinate and texture coordinate
