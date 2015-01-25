@@ -29,9 +29,10 @@
       var gl = canvas.getContext('webgl');
 
       // enable z-buffer and alpha blending
-      gl.enable(gl.DEPTH_TEST);
+      // gl.enable(gl.DEPTH_TEST);
       gl.enable(gl.BLEND);
       gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+      gl.enable(gl.CULL_FACE);
 
       var spriteProgram;
       var testArrayBuffer;
@@ -72,7 +73,7 @@
       var theta = 0;
 
       function update() {
-        theta += Math.PI / 240;
+        theta += Math.PI / 360;
 
         var worldTransform = tmpTransform
           .setFromArray(perspTransform.m_)
@@ -88,6 +89,10 @@
         // set uniforms
         spriteProgram.uniforms.globeMatrix(worldTransform.m_);
 
+        gl.cullFace(gl.FRONT);
+        gl.drawArrays(gl.TRIANGLES, 0, TEST_COUNT * 6);
+
+        gl.cullFace(gl.BACK);
         gl.drawArrays(gl.TRIANGLES, 0, TEST_COUNT * 6);
 
         window.requestAnimationFrame(update);

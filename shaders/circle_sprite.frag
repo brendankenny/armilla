@@ -7,9 +7,7 @@ varying vec2 localCoord;
 
 void main() {
   float dist = length(localCoord - vec2(.5, .5)) / .5;
-  if (dist > 0.5) {
-    discard;
-  }
+  float alpha = 1. - smoothstep(0.98, 1., dist);
 
-  gl_FragColor = vec4(BLACK, 1);
+  gl_FragColor = vec4(BLACK, 1) * alpha;
 }
